@@ -1,0 +1,42 @@
+
+version: '3'
+
+services:
+  ds-front:
+    build: ../duck-spawner-front
+    image: duck-spawner-front
+    ports:
+      - "80:3000"
+    depends_on:
+      - ds-api
+    networks:
+      - duck-spawner
+
+  ds-api:
+    build: ../duck-spawner-api
+    image: duck-spawner-api
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/duckdb
+    depends_on:
+      - mongo
+    networks:
+      - duck-spawner
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - duck-spawner
+
+volumes:
+  mongo-data:
+
+
+networks:
+  duck-spawner:
+
+
+
